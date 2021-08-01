@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "57079981213",
+    "project_id": "franciscan-faa05",
+    "storage_bucket": "franciscan-faa05.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:57079981213:android:a705d6e89651db1df56074",
+        "android_client_info": {
+          "package_name": "com.franciscain.lautrerive"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "57079981213-6j23qsqkffpc47ivmatphl3h82leg912.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD99QiKWB0jLv2jSggdQKqFO2sgogPh4Qg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "57079981213-6j23qsqkffpc47ivmatphl3h82leg912.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
