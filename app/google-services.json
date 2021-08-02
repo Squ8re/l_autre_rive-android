@@ -1,33 +1,34 @@
 {
   "project_info": {
-    "project_number": "57079981213",
-    "project_id": "franciscan-faa05",
-    "storage_bucket": "franciscan-faa05.appspot.com"
+    "project_number": "98408483552",
+    "firebase_url": "https://franciscains-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "franciscains",
+    "storage_bucket": "franciscains.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:57079981213:android:a705d6e89651db1df56074",
+        "mobilesdk_app_id": "1:98408483552:android:24c93780bcbdb56ec15e85",
         "android_client_info": {
           "package_name": "com.franciscain.lautrerive"
         }
       },
       "oauth_client": [
         {
-          "client_id": "57079981213-6j23qsqkffpc47ivmatphl3h82leg912.apps.googleusercontent.com",
+          "client_id": "98408483552-261gnr2kgm0or6ce3sp2elv7upibljl4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD99QiKWB0jLv2jSggdQKqFO2sgogPh4Qg"
+          "current_key": "AIzaSyDynRB0C5CYLwze7xT_7IE2kvi274sCtJM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "57079981213-6j23qsqkffpc47ivmatphl3h82leg912.apps.googleusercontent.com",
+              "client_id": "98408483552-261gnr2kgm0or6ce3sp2elv7upibljl4.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

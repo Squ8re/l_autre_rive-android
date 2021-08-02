@@ -17,6 +17,12 @@ import com.franciscain.lautrerive.MainActivity;
 import com.franciscain.lautrerive.R;
 import com.google.firebase.auth.FirebaseAuth;
 
+/**
+ * Cette activité permet à un utilisateur de se connecter à l'application
+ *
+ * Le tutoriel de "CodeWithMazn" a été très utile dans la réalisation de cette classe.
+ *          https://www.youtube.com/watch?v=w-Uv-ydX_LY
+ */
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView editTextEmail, editTextMotDePasse;
@@ -91,7 +97,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         if(motDePasse.length() < 6) {
-            editTextMotDePasse.setError("Votre mot de passe doit faire six caractères. Réessayez !");
+            editTextMotDePasse.setError("Votre mot de passe n'est pas valide. Réessayez !");
             editTextMotDePasse.requestFocus();
             return;
         }
