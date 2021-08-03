@@ -5,7 +5,12 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
 
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +18,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.franciscain.lautrerive.R;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
+import com.google.android.youtube.player.YouTubePlayerView;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -41,7 +50,8 @@ public class FragmentEnseignement extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    TextView evangile;
+    private TextView evangile;
+    private TextView textViewLienVideo;
 
     public FragmentEnseignement() {
         // Required empty public constructor
@@ -72,7 +82,6 @@ public class FragmentEnseignement extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
     }
 
     @Override
@@ -84,9 +93,12 @@ public class FragmentEnseignement extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
-        evangile = getView().findViewById(R.id.evangile);
+        evangile    = getView().findViewById(R.id.evangile);
+        textViewLienVideo   = getView().findViewById(R.id.lienVideo);
+        textViewLienVideo.setMovementMethod(LinkMovementMethod.getInstance());
 
         new RecupereEvangile().execute();
+        new RecupereVideo().execute();
     }
 
     public class RecupereEvangile extends AsyncTask<Void, Void, Void>{
@@ -116,6 +128,24 @@ public class FragmentEnseignement extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             evangile.setText(textEvangile);
+        }
+    }
+    public class RecupereVideo extends AsyncTask<Void, Void, Void>{
+
+        String lienVideo;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            // TODO : Récupérer vidéo depuis la database
+            lienVideo = "https://youtu.be/kP6cgoMBYbc";
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            textViewLienVideo.setText(Html.fromHtml("<a href=\""+lienVideo+"\">Vidéo d'enseignement</a> "));
+            textViewLienVideo.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
 }
