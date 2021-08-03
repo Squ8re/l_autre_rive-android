@@ -10,12 +10,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.franciscain.lautrerive.R;
 
-/**
- * A [FragmentPagerAdapter] that returns a fragment corresponding to
- * one of the sections/tabs/pages.
- */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
     @StringRes
     private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2};
     private final Context mContext;
@@ -27,20 +22,38 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(position + 1);
+        Fragment fragment = null;
+        switch(position){
+            case 0:
+                fragment = FragmentTableauDeBord.newInstance(null,null);
+                break;
+            case 1:
+                fragment = FragmentEnseignement.newInstance(null,null);
+                break;
+            case 2:
+                fragment = FragmentFAQ.newInstance(null,null);
+                break;
+        }
+        return fragment;
     }
 
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return mContext.getResources().getString(TAB_TITLES[position]);
+        switch (position){
+            case 0:
+                return "Tableau de bord";
+            case 1:
+                return "Enseignements";
+            case 2:
+                return "FAQ";
+        }
+        return null;
     }
 
     @Override
     public int getCount() {
         // Show 2 total pages.
-        return 2;
+        return 3;
     }
 }
