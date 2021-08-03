@@ -6,9 +6,17 @@
     tools:context=".ui.main.FragmentFAQ">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="FAQ" />
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/listeVideoFAQ"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>

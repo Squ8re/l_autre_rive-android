@@ -1,12 +1,18 @@
 package com.franciscain.lautrerive.ui.main;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.franciscain.lautrerive.R;
 
@@ -25,6 +31,8 @@ public class FragmentFAQ extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private LinearLayout ListeVideoFAQ;
 
     public FragmentFAQ() {
         // Required empty public constructor
@@ -62,5 +70,34 @@ public class FragmentFAQ extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_faq, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
+        ListeVideoFAQ = getView().findViewById(R.id.listeVideoFAQ);
+        new VideosFAQ().execute();
+    }
+
+    public class VideosFAQ extends AsyncTask<Void, Void, Void> {
+
+        String lienVideo;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            // TODO : Récupérer vidéo depuis la database
+            lienVideo = "https://youtu.be/kP6cgoMBYbc";
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            for (int i = 0; i<45; i++) {
+                TextView video = new TextView(getActivity());
+                video.setText(Html.fromHtml("<a href=\"" + lienVideo + "\">Vidéo FAQ</a> "));
+                video.setMovementMethod(LinkMovementMethod.getInstance());
+                ListeVideoFAQ.addView(video);
+            }
+        }
     }
 }
