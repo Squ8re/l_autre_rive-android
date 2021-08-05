@@ -6,9 +6,18 @@
     tools:context=".ui.main.FragmentTableauDeBord">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/ScrollViewBadges"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:fillViewport="true">
+
+        <androidx.gridlayout.widget.GridLayout
+            android:id="@+id/gridLayoutBadges"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </androidx.gridlayout.widget.GridLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>

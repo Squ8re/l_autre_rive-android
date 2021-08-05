@@ -1,12 +1,15 @@
 package com.franciscain.lautrerive.ui.main;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridLayout;
 
 import com.franciscain.lautrerive.R;
 
@@ -25,6 +28,10 @@ public class FragmentTableauDeBord extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private GridLayout GridLayout;
+
+
 
     public FragmentTableauDeBord() {
         // Required empty public constructor
@@ -62,5 +69,24 @@ public class FragmentTableauDeBord extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_tableau_de_bord, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
+        GridLayout = getView().findViewById(R.id.gridLayoutBadges);
+
+    }
+
+    public class MesObjectifs extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void unused) {
+            super.onPostExecute(unused);
+        }
     }
 }
