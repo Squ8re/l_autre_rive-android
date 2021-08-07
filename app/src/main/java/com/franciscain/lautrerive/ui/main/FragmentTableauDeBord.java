@@ -9,9 +9,14 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
+import android.widget.Button;
+import androidx.gridlayout.widget.GridLayout;
 
 import com.franciscain.lautrerive.R;
+import com.franciscain.lautrerive.objets.Objectif;
+import com.franciscain.lautrerive.outils.Database;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,7 +34,7 @@ public class FragmentTableauDeBord extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private GridLayout GridLayout;
+    private GridLayout gridLayout;
 
 
 
@@ -73,20 +78,54 @@ public class FragmentTableauDeBord extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
-        GridLayout = getView().findViewById(R.id.gridLayoutBadges);
+        gridLayout = getView().findViewById(R.id.gridLayoutBadges);
+        new MesObjectifs().execute();
 
     }
 
-    public class MesObjectifs extends AsyncTask<Void, Void, Void>{
+    public class MesObjectifs extends AsyncTask<Void, Void, Void> {
+
+        Objectif[] objectifs;
 
         @Override
         protected Void doInBackground(Void... voids) {
+            objectifs = Database.getMesObjectifs().toArray(new Objectif[0]);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void unused) {
             super.onPostExecute(unused);
+            gridLayout.setColumnCount(3);
+
+            int nombreBoutons       = objectifs.length;
+            int boutonsParColonne   = 3;
+            int boutonsAjoutés      = 0;
+            int indexColonne        = 0;
+            int indexLigne          = 0;
+
+            for(int i=0; i <nombreBoutons; i++){
+                if(!(boutonsAjoutés <boutonsParColonne)){
+                    indexLigne++;
+                    boutonsAjoutés  = 0;
+                    indexColonne    = 0;
+                }
+                GridLayout.Spec ligne   = GridLayout.spec(indexLigne,1);
+                GridLayout.Spec colonne = GridLayout.spec(indexColonne,1);
+                GridLayout.LayoutParams gridLayoutParam = new GridLayout.LayoutParams(ligne,colonne);
+
+                Button boutonObjectif = creerBoutonObjectif(objectifs[i]);
+                gridLayout.addView( boutonObjectif,gridLayoutParam);
+
+                boutonsAjoutés++;
+                indexColonne++;
+            }
         }
     }
-}
+
+        private Button creerBoutonObjectif(Objectif objectif) {
+            Button bouton = new Button(getContext());
+            bouton.setText(objectif.getNom());
+            return bouton;
+        }
+    }

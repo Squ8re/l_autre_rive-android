@@ -14,10 +14,13 @@ import android.widget.Toast;
 
 import com.franciscain.lautrerive.MainActivity;
 import com.franciscain.lautrerive.R;
+import com.franciscain.lautrerive.objets.Objectif;
 import com.franciscain.lautrerive.objets.Utilisateur;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 /**
  * Cette classe permet à un utilisateur de se créer un compte dans l'application
@@ -108,7 +111,7 @@ public class CreerCompte extends AppCompatActivity implements View.OnClickListen
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()){
                         Utilisateur utilisateur = new Utilisateur(nom, mail);
-
+                        ArrayList<Objectif> mesObjectifs = utilisateur.getObjectifs();
                         FirebaseDatabase.getInstance().getReference("Users")
                                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(utilisateur).addOnCompleteListener(task1 -> {
                             if (task1.isSuccessful()) {
