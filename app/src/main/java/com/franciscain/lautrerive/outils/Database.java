@@ -19,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.ktx.Firebase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Database {
 
@@ -52,7 +53,29 @@ public class Database {
         return listeObjectifs.toArray(new String[0]);
     }
 
-    public static ArrayList<Objectif> getMesObjectifs() {
+    public static Utilisateur getMesObjectifs() {
+        DatabaseReference refUser = FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        final Utilisateur[] utilisateur = {new Utilisateur()};
+        ValueEventListener listener;
+        refUser.addValueEventListener(listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                utilisateur[0] = snapshot.getValue(Utilisateur.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "loadPost:onCancelled", error.toException());
+            }
+        });
+        while(utilisateur[0].getNom() == null){
+            //waiting
+        }
+        refUser.removeEventListener(listener);
+        return utilisateur[0];
+    }
+
+    public static Utilisateur getUtilisateur(){
         DatabaseReference refUser = FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         final Utilisateur[] utilisateur = {new Utilisateur()};
         refUser.addValueEventListener(new ValueEventListener() {
@@ -69,26 +92,13 @@ public class Database {
         while(utilisateur[0].getNom() == null){
             //waiting
         }
-        return utilisateur[0].getObjectifs();
+        return utilisateur[0];
     }
 
-    public static Utilisateur getUtilisateur(){
+    public static void updateObjectifs(ArrayList<Objectif> objectifs) {
         DatabaseReference refUser = FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        final Utilisateur[] utilisateur = {new Utilisateur()};
-        refUser.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                utilisateur[0] = snapshot.getValue(Utilisateur.class);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                //error
-            }
-        });
-        while(utilisateur[0].getNom() == null){
-            //waiting
-        }
-        return utilisateur[0];
+        HashMap map = new HashMap();
+        map.put("objectifs", objectifs);
+        refUser.updateChildren(map);
     }
 }

@@ -14,8 +14,10 @@ import androidx.gridlayout.widget.GridLayout;
 
 import com.franciscain.lautrerive.R;
 import com.franciscain.lautrerive.objets.Objectif;
+import com.franciscain.lautrerive.objets.Utilisateur;
 import com.franciscain.lautrerive.outils.Database;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -36,6 +38,7 @@ public class FragmentTableauDeBord extends Fragment {
 
     private GridLayout gridLayout;
 
+    Utilisateur utilisateur;
 
 
     public FragmentTableauDeBord() {
@@ -83,13 +86,14 @@ public class FragmentTableauDeBord extends Fragment {
 
     }
 
-    public class MesObjectifs extends AsyncTask<Void, Void, Void> {
+    public class MesObjectifs extends AsyncTask<Void, Void, Void> implements View.OnClickListener{
 
         Objectif[] objectifs;
 
         @Override
         protected Void doInBackground(Void... voids) {
-            objectifs = Database.getMesObjectifs().toArray(new Objectif[0]);
+            utilisateur = Database.getMesObjectifs();
+            objectifs = utilisateur.getObjectifs().toArray(new Objectif[0]);
             return null;
         }
 
@@ -116,16 +120,24 @@ public class FragmentTableauDeBord extends Fragment {
 
                 Button boutonObjectif = creerBoutonObjectif(objectifs[i]);
                 gridLayout.addView( boutonObjectif,gridLayoutParam);
+                boutonObjectif.setOnClickListener(this::onClick);
 
                 boutonsAjoutés++;
                 indexColonne++;
             }
+        }
+
+        @Override
+        public void onClick(View view) {
+            String tag = (String) view.getTag();
+            utilisateur.objectifReussi(tag, LocalDate.now());
         }
     }
 
         private Button creerBoutonObjectif(Objectif objectif) {
             Button bouton = new Button(getContext());
             bouton.setText(objectif.getNom());
+            bouton.setTag(objectif.getNom());
             return bouton;
         }
     }
