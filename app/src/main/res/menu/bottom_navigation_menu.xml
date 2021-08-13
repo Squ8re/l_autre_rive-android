@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/tableau_de_bord"
+        android:enabled="true"
+        android:icon="@drawable/icon_maison"
+        android:title="Résumé"/>
+    <item
+        android:id="@+id/enseignement"
+        android:enabled="true"
+        android:icon="@drawable/icon_livre"
+        android:title="Enseignement"/>
+    <item
+        android:id="@+id/faq"
+        android:enabled="true"
+        android:icon="@drawable/icon_questions"
+        android:title="FAQ"/>
+</menu>
