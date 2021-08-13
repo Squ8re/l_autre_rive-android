@@ -9,6 +9,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +50,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         editTextEmail       = (EditText) findViewById(R.id.editTextEmail);
         editTextMotDePasse  = (EditText) findViewById(R.id.editTextTextPassword);
 
-        ConstraintLayout loginForm = (ConstraintLayout) findViewById(R.id.LayoutConnexion);
+        LinearLayout loginForm = (LinearLayout) findViewById(R.id.LayoutConnexion);
 
         progressBar = findViewById(R.id.progressBar);
 
