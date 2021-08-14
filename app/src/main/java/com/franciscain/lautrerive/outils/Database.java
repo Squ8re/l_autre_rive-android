@@ -10,6 +10,7 @@ import com.franciscain.lautrerive.objets.Objectif;
 import com.franciscain.lautrerive.objets.Utilisateur;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -72,26 +73,6 @@ public class Database {
             //waiting
         }
         refUser.removeEventListener(listener);
-        return utilisateur[0];
-    }
-
-    public static Utilisateur getUtilisateur(){
-        DatabaseReference refUser = FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        final Utilisateur[] utilisateur = {new Utilisateur()};
-        refUser.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                utilisateur[0] = snapshot.getValue(Utilisateur.class);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w(TAG, "loadPost:onCancelled", error.toException());
-            }
-        });
-        while(utilisateur[0].getNom() == null){
-            //waiting
-        }
         return utilisateur[0];
     }
 

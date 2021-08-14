@@ -45,6 +45,11 @@ public class Utilisateur {
         updateUser();
     }
 
+    public void addObjectif(String nom){
+        objectifs.add(new Objectif(nom));
+        updateUser();
+    }
+
     @Exclude
     public void objectifReussi(String nomObjectif, LocalDate date){
         objectifs.get(this.indexOfName(nomObjectif)).jourReussi(date);

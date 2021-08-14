@@ -1,31 +1,60 @@
 package com.franciscain.lautrerive.ui.main;
 
+import static android.content.ContentValues.TAG;
+
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
+
 import androidx.gridlayout.widget.GridLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.franciscain.lautrerive.R;
 import com.franciscain.lautrerive.objets.Objectif;
 import com.franciscain.lautrerive.objets.Utilisateur;
+import com.franciscain.lautrerive.outils.AdapterObjectifs;
 import com.franciscain.lautrerive.outils.Database;
+import com.franciscain.lautrerive.outils.DialogCloseListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link FragmentTableauDeBord#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentTableauDeBord extends Fragment {
+public class FragmentTableauDeBord extends Fragment implements DialogCloseListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,10 +64,12 @@ public class FragmentTableauDeBord extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private RecyclerView recyclerView; // TODO : nouvel fct
+    private AdapterObjectifs adapterObjectifs;
 
-    private GridLayout gridLayout;
-
-    Utilisateur utilisateur;
+    private List<Objectif> objectifListe;
+    private ProgressBar progressBar;
+    private FloatingActionButton fab;
 
 
     public FragmentTableauDeBord() {
@@ -76,68 +107,52 @@ public class FragmentTableauDeBord extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        objectifListe   = new ArrayList<>();
         return inflater.inflate(R.layout.fragment_tableau_de_bord, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
-        gridLayout = getView().findViewById(R.id.gridLayoutBadges);
-        new MesObjectifs().execute();
+        progressBar     = view.findViewById(R.id.progressBar_tableau_de_Bord);
+        progressBar.setVisibility(View.VISIBLE);
+        recyclerView    = getView().findViewById(R.id.recyclerView_objectifs);
+        fab   = getView().findViewById(R.id.bouton_nouvel_objectif);
 
-    }
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapterObjectifs = new AdapterObjectifs(this);
+        recyclerView.setAdapter(adapterObjectifs);
 
-    public class MesObjectifs extends AsyncTask<Void, Void, Void> implements View.OnClickListener{
+        Objectif objectif = new Objectif();
+        objectif.setNom("Patientez pendant le chargement de vos objectifs.");
 
-        Objectif[] objectifs;
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            utilisateur = Database.getMesObjectifs();
-            objectifs = utilisateur.getObjectifs().toArray(new Objectif[0]);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void unused) {
-            super.onPostExecute(unused);
-            gridLayout.setColumnCount(3);
-
-            int nombreBoutons       = objectifs.length;
-            int boutonsParColonne   = 3;
-            int boutonsAjoutés      = 0;
-            int indexColonne        = 0;
-            int indexLigne          = 0;
-
-            for(int i=0; i <nombreBoutons; i++){
-                if(!(boutonsAjoutés <boutonsParColonne)){
-                    indexLigne++;
-                    boutonsAjoutés  = 0;
-                    indexColonne    = 0;
-                }
-                GridLayout.Spec ligne   = GridLayout.spec(indexLigne,1);
-                GridLayout.Spec colonne = GridLayout.spec(indexColonne,1);
-                GridLayout.LayoutParams gridLayoutParam = new GridLayout.LayoutParams(ligne,colonne);
-
-                Button boutonObjectif = creerBoutonObjectif(objectifs[i]);
-                gridLayout.addView( boutonObjectif,gridLayoutParam);
-                boutonObjectif.setOnClickListener(this::onClick);
-
-                boutonsAjoutés++;
-                indexColonne++;
+        objectifListe.add(objectif);
+        adapterObjectifs.setObjectifs(objectifListe);
+        DatabaseReference refUser = FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        refUser.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Utilisateur utilisateur = snapshot.getValue(Utilisateur.class);
+                progressBar.setProgress(90);
+                adapterObjectifs.setObjectifs(utilisateur.getObjectifs());
+                adapterObjectifs.notifyDataSetChanged();
+                progressBar.setVisibility(View.GONE);
             }
-        }
 
-        @Override
-        public void onClick(View view) {
-            String tag = (String) view.getTag();
-            utilisateur.objectifReussi(tag, LocalDate.now());
-        }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentDialog_AjoutObjectif.newInstance().show(getParentFragmentManager(), FragmentDialog_AjoutObjectif.TAG);
+            }
+        });
     }
 
-        private Button creerBoutonObjectif(Objectif objectif) {
-            Button bouton = new Button(getContext());
-            bouton.setText(objectif.getNom());
-            bouton.setTag(objectif.getNom());
-            return bouton;
-        }
+    @Override
+    public void handleDialogClose(DialogInterface dialog) {
+        /*objectifListe = Database.getMesObjectifs().getObjectifs();
+        adapterObjectifs.setObjectifs(objectifListe);
+        adapterObjectifs.notifyDataSetChanged();*/
     }
+}
