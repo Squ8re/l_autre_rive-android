@@ -128,7 +128,7 @@ public class FragmentTableauDeBord extends Fragment implements DialogCloseListen
         objectifListe.add(objectif);
         adapterObjectifs.setObjectifs(objectifListe);
         DatabaseReference refUser = FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        refUser.addValueEventListener(new ValueEventListener() {
+        refUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Utilisateur utilisateur = snapshot.getValue(Utilisateur.class);
